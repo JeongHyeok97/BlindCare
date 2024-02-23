@@ -10,6 +10,8 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
+import android.speech.tts.TextToSpeech.OnInitListener
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,6 +40,7 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,21 +48,31 @@ class MainActivity : ComponentActivity() {
     companion object{
         private const val REQUEST_CAMERA = 1111
     }
+
     val scope = CoroutineScope(Dispatchers.IO)
     @Inject
     lateinit var pictureAPI: PictureAPI
 
+    private var tts: TextToSpeech? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+        tts = TextToSpeech(this, object :OnInitListener{
+            override fun onInit(status: Int) {
+                if (status == TextToSpeech.SUCCESS){
+                    tts?.setLanguage(Locale.KOREA)
+                }
+            }
 
+        })
+        setContent {
             BlindPharmacyTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    PharmacyNavHost()
+                    PharmacyNavHost(tts!!)
                 }
             }
         }

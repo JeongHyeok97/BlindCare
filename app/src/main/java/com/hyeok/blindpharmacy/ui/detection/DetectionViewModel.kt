@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.hyeok.blindpharmacy.R
 import com.hyeok.blindpharmacy.config.PictureAPI
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -41,6 +43,9 @@ class DetectionViewModel @Inject constructor(
 
 
     suspend fun post(context: Context, bitmap: Bitmap){
+        withContext(Dispatchers.Main){
+            mImage.postValue(bitmap)
+        }
         val file = getFileFromBitmap(context, bitmap)
         if (file != null){
             val requestBody = file.asRequestBody("image/png".toMediaTypeOrNull())
@@ -51,13 +56,19 @@ class DetectionViewModel @Inject constructor(
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    mImage.postValue(bitmap)
-                    val description = ObjectMapper().readTree(response.body()?.string()).get("description")
-                    mImageDescription.postValue("$description")
+                    val responseBody = response.body()?.string()
+                    if (response.isSuccessful){
+                        val description = ObjectMapper().readTree(responseBody).get("description")
+                        mImageDescription.postValue("$description")
+                    }
+                    else{
+                        mImageDescription.postValue("Failed")
+                    }
+                    println(responseBody)
+
                 }
-
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-
+                    t.printStackTrace()
                 }
             })
         }

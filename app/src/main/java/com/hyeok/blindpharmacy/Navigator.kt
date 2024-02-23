@@ -1,16 +1,7 @@
 package com.hyeok.blindpharmacy
 
-import android.Manifest
-import android.app.Activity
-import android.content.pm.PackageManager
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
+import android.speech.tts.TextToSpeech
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,8 +11,8 @@ import com.hyeok.blindpharmacy.Destination.DETECTION_ROUTE
 import com.hyeok.blindpharmacy.Destination.DRUG_MANAGE_ROUTE
 import com.hyeok.blindpharmacy.Destination.SETTINGS_ROUTE
 import com.hyeok.blindpharmacy.Destination.START_ROUTE
+import com.hyeok.blindpharmacy.ui.chat.ChatRoute
 import com.hyeok.blindpharmacy.ui.detection.DetectionRoute
-import com.hyeok.blindpharmacy.ui.detection.DetectionViewModel
 import com.hyeok.blindpharmacy.ui.main.MainScreen
 import com.hyeok.blindpharmacy.ui.main.Menu
 
@@ -34,7 +25,9 @@ object Destination{
 }
 
 @Composable
-fun PharmacyNavHost(navController: NavHostController = rememberNavController()) {
+fun PharmacyNavHost(
+    tts: TextToSpeech,
+    navController: NavHostController = rememberNavController()) {
 
 
     NavHost(navController=navController, startDestination = START_ROUTE){
@@ -46,7 +39,6 @@ fun PharmacyNavHost(navController: NavHostController = rememberNavController()) 
                         navController.navigate(CHAT_ROUTE)
                     }
                     Menu.Detection ->{
-
                         navController.navigate(DETECTION_ROUTE)
                     }
                     Menu.DrugManage ->{
@@ -59,7 +51,9 @@ fun PharmacyNavHost(navController: NavHostController = rememberNavController()) 
             }
         }
         composable(CHAT_ROUTE){
-
+            ChatRoute(){answer->
+                tts.speak(answer, TextToSpeech.QUEUE_FLUSH, null, "answer")
+            }
         }
         composable(DETECTION_ROUTE){
             DetectionRoute()
@@ -73,6 +67,8 @@ fun PharmacyNavHost(navController: NavHostController = rememberNavController()) 
         }
     }
 }
+
+
 
 
 

@@ -29,11 +29,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hyeok.blindpharmacy.ui.theme.DefaultBackground
 
 @Composable
 fun MainScreen(onClickMenu: (Menu)->Unit) {
     Scaffold(
-        containerColor = Color(0xFF2D2D2D),
+        containerColor = DefaultBackground,
         topBar = { TopBar() }
     ){
         Box(modifier = Modifier
@@ -100,10 +101,10 @@ fun TopBar(/*navController: NavHostController*/){
     )
 }
 
-@Preview(showBackground = true, device = "spec:width=411dp,height=891dp, orientation=portrait")
-@Composable
-fun MainPreview() {
-    Surface(color = Color(0xFF2D2D2D)) {
-        MainScreen(){}
-    }
-}
+//@Preview(showBackground = true, device = "spec:width=411dp,height=891dp, orientation=portrait")
+//@Composable
+//fun MainPreview() {
+//    Surface(color = DefaultBackground) {
+//        MainScreen(){}
+//    }
+//}

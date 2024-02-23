@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">BlindPharmacy</string>
+    <string name="detect_screen">화면 감지</string>
+    <string name="start_detection">곧, 카메라가 실행됩니다. 원하시는 방향을 촬영해주세요</string>
+    <string name="chat_mic">음성으로 질문</string>
+    <string name="chat_image"> 약품 이미지로 질문</string>
+    <string name="chat_bot">챗 봇</string>
+    <string name="me">Me!</string>
 </resources>
