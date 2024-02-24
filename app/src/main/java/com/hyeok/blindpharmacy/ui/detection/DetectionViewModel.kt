@@ -42,7 +42,7 @@ class DetectionViewModel @Inject constructor(
         }
 
 
-    suspend fun post(context: Context, bitmap: Bitmap){
+    suspend fun post(context: Context, bitmap: Bitmap, onDescription: (String)->Unit){
         withContext(Dispatchers.Main){
             mImage.postValue(bitmap)
         }
@@ -60,11 +60,11 @@ class DetectionViewModel @Inject constructor(
                     if (response.isSuccessful){
                         val description = ObjectMapper().readTree(responseBody).get("description")
                         mImageDescription.postValue("$description")
+                        onDescription("$description")
                     }
                     else{
                         mImageDescription.postValue("Failed")
                     }
-                    println(responseBody)
 
                 }
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {

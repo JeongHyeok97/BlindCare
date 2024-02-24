@@ -1,6 +1,8 @@
 package com.hyeok.blindpharmacy
 
+import com.hyeok.blindpharmacy.config.DrugInfoApi
 import com.hyeok.blindpharmacy.config.PictureAPI
+import com.hyeok.blindpharmacy.ui.chat.DrugInfoRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,8 +42,23 @@ object NetworkModule {
     ): PictureAPI {
         return Retrofit.Builder()
             .client(client)
-            .baseUrl(PictureAPI.TEXT_API_BASE)
+            .baseUrl(PictureAPI.BASE_URL)
             .build().create(PictureAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDrugInfoAPI(client: OkHttpClient): DrugInfoApi{
+        return Retrofit.Builder()
+            .client(client)
+            .baseUrl(DrugInfoApi.BASE_URL)
+            .build().create(DrugInfoApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDrugInfoRepository(drugInfoApi: DrugInfoApi): DrugInfoRepository {
+        return DrugInfoRepository(drugInfoApi)
     }
 
 }

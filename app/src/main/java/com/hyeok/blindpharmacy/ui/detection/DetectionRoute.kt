@@ -51,13 +51,13 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun DetectionRoute(/*tts: TextToSpeech*/) {
+fun DetectionRoute(onDescription: (String)->Unit) {
     val detectionViewModel = hiltViewModel<DetectionViewModel>()
-    DetectionScreen(/*tts,*/detectionViewModel)
+    DetectionScreen(detectionViewModel, onDescription)
 }
 
 @Composable
-fun DetectionScreen(detectionViewModel: DetectionViewModel) {
+fun DetectionScreen(detectionViewModel: DetectionViewModel, onDescription: (String)->Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -70,7 +70,7 @@ fun DetectionScreen(detectionViewModel: DetectionViewModel) {
                 scope.launch(Dispatchers.IO) {
                     val drawable = ContextCompat.getDrawable(context, R.drawable.hanabi)
                     val bitmap = (drawable as BitmapDrawable).bitmap
-                    detectionViewModel.post(context, bitmap)
+                    detectionViewModel.post(context, bitmap, onDescription)
 //                    detectionViewModel.post(context,takenPhoto)
                 }
             }
@@ -117,7 +117,8 @@ fun DetectionBox(
                     if (resultDescriptionState != null){
                         Text(
                             modifier = Modifier.weight(0.4f),
-                            text = resultDescriptionState)
+                            text = resultDescriptionState,
+                            color = Color.White)
                     }
                 }
 

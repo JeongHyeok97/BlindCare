@@ -1,7 +1,10 @@
 package com.hyeok.blindpharmacy
 
+import android.annotation.SuppressLint
 import android.speech.tts.TextToSpeech
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,6 +27,7 @@ object Destination{
     const val SETTINGS_ROUTE = "setting"
 }
 
+@SuppressLint("OpaqueUnitKey")
 @Composable
 fun PharmacyNavHost(
     tts: TextToSpeech,
@@ -51,12 +55,29 @@ fun PharmacyNavHost(
             }
         }
         composable(CHAT_ROUTE){
-            ChatRoute(){answer->
-                tts.speak(answer, TextToSpeech.QUEUE_FLUSH, null, "answer")
+            DisposableEffect(
+                ChatRoute(
+                onMessage = {text->
+                    if (navController.currentBackStackEntry == it){
+                        if (!tts.isSpeaking){
+                            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "answer")
+                        }
+                    }
+                }
+            )){
+                onDispose {
+                    tts.stop()
+                }
             }
         }
         composable(DETECTION_ROUTE){
-            DetectionRoute()
+            DetectionRoute { text->
+                if (navController.currentBackStackEntry == it){
+                    if (!tts.isSpeaking){
+                        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "answer")
+                    }
+                }
+            }
         }
 
         composable(DRUG_MANAGE_ROUTE){

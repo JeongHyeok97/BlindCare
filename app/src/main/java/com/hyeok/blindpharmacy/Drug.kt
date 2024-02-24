@@ -1,22 +1,27 @@
 package com.hyeok.blindpharmacy
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
+
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 data class Drug(
-    @JsonProperty("resultCode")
-    val resultCode: String,
-
-    @JsonProperty("resultMsg")
-    val resultMsg: String,
-
-    @JsonProperty("numOfRows")
-    val numOfRows: Int?,
-
-    @JsonProperty("pageNo")
-    val pageNo: Int?,
-
-    @JsonProperty("totalCount")
-    val totalCount: Long?,
+//    @JsonProperty("resultCode")
+//    val resultCode: String,
+//
+//    @JsonProperty("resultMsg")
+//    val resultMsg: String,
+//
+//    @JsonProperty("numOfRows")
+//    val numOfRows: Int?,
+//
+//    @JsonProperty("pageNo")
+//    val pageNo: Int?,
+//
+//    @JsonProperty("totalCount")
+//    val totalCount: Long?,
 
     @JsonProperty("entpName")
     val entpName: String?,
