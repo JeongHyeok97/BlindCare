@@ -68,10 +68,10 @@ fun DetectionScreen(detectionViewModel: DetectionViewModel, onDescription: (Stri
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { takenPhoto ->
             if (takenPhoto != null) {
                 scope.launch(Dispatchers.IO) {
-                    val drawable = ContextCompat.getDrawable(context, R.drawable.hanabi)
-                    val bitmap = (drawable as BitmapDrawable).bitmap
-                    detectionViewModel.post(context, bitmap, onDescription)
-//                    detectionViewModel.post(context,takenPhoto)
+//                    val drawable = ContextCompat.getDrawable(context, R.drawable.hanabi)
+//                    val bitmap = (drawable as BitmapDrawable).bitmap
+//                    detectionViewModel.post(context, bitmap, onDescription)
+                    detectionViewModel.post(context, takenPhoto, onDescription)
                 }
             }
         }
@@ -85,8 +85,6 @@ fun DetectionScreen(detectionViewModel: DetectionViewModel, onDescription: (Stri
                 1111
             )
         } else {
-//            val startText = context.resources.getString(R.string.start_detection)
-//            tts.speak(startText, TextToSpeech.QUEUE_FLUSH, null, "start_detection")
             takePhotoFromCameraLauncher.launch()
         }}
 }
@@ -147,13 +145,4 @@ fun DetectionBox(
     }
 }
 
-@Composable
-@Preview
-fun DetectionBoxPreview(){
-    Surface() {
-        DetectionBox(null, "벚꽃이 휘날리는 사진입니다.") {
-
-        }
-    }
-}
 

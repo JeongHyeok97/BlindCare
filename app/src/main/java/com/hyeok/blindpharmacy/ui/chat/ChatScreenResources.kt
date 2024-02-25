@@ -89,7 +89,7 @@ fun LazyItemScope.MessageBox(message: Message){
                 modifier = Modifier
                     .align(Alignment.Bottom)
                     .offset(x = 5.dp, y = (-5).dp),
-                text = timestampToTimeString(message.timestamp),
+                text = timestampToTimeString(message.timestamp, "HH:mm"),
                 color= Color.White)
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -99,9 +99,9 @@ fun LazyItemScope.MessageBox(message: Message){
 }
 
 @SuppressLint("SimpleDateFormat")
-fun timestampToTimeString(timestamp:Long):String{
+fun timestampToTimeString(timestamp:Long, pattern: String):String{
     try {
-        val sdf = SimpleDateFormat("HH:mm")
+        val sdf = SimpleDateFormat(pattern)
         val netDate = Date(timestamp)
         return sdf.format(netDate)
     } catch (e: Exception) {

@@ -18,6 +18,7 @@ import com.hyeok.blindpharmacy.ui.chat.ChatRoute
 import com.hyeok.blindpharmacy.ui.detection.DetectionRoute
 import com.hyeok.blindpharmacy.ui.main.MainScreen
 import com.hyeok.blindpharmacy.ui.main.Menu
+import com.hyeok.blindpharmacy.ui.manage.ManageRoute
 
 object Destination{
     const val START_ROUTE = "main"
@@ -57,31 +58,56 @@ fun PharmacyNavHost(
         composable(CHAT_ROUTE){
             DisposableEffect(
                 ChatRoute(
-                onMessage = {text->
-                    if (navController.currentBackStackEntry == it){
-                        if (!tts.isSpeaking){
-                            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "answer")
-                        }
+                    onMessage = {text->
+                        if (navController.currentBackStackEntry == it){
+                            if (!tts.isSpeaking){
+                                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "answer")
+                            }
+                        }},
+                    onStopMessage = {
+                        tts.stop()
                     }
-                }
-            )){
+            )
+
+            ){
                 onDispose {
                     tts.stop()
                 }
             }
         }
         composable(DETECTION_ROUTE){
-            DetectionRoute { text->
+            DisposableEffect(DetectionRoute { text->
                 if (navController.currentBackStackEntry == it){
                     if (!tts.isSpeaking){
                         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "answer")
                     }
                 }
             }
+            ){
+                onDispose {
+                    tts.stop()
+                }
+            }
         }
 
         composable(DRUG_MANAGE_ROUTE){
-
+            DisposableEffect(ManageRoute(
+                onSpeech = { text->
+                    if (navController.currentBackStackEntry == it){
+                        if (!tts.isSpeaking){
+                            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "answer")
+                        }
+                    }
+                },
+                onStop = {
+                    tts.stop()
+                }
+            )
+            ){
+                onDispose {
+                    tts.stop()
+                }
+            }
         }
         composable(SETTINGS_ROUTE){
 

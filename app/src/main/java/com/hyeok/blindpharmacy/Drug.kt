@@ -8,57 +8,42 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 data class Drug(
-//    @JsonProperty("resultCode")
-//    val resultCode: String,
-//
-//    @JsonProperty("resultMsg")
-//    val resultMsg: String,
-//
-//    @JsonProperty("numOfRows")
-//    val numOfRows: Int?,
-//
-//    @JsonProperty("pageNo")
-//    val pageNo: Int?,
-//
-//    @JsonProperty("totalCount")
-//    val totalCount: Long?,
-
     @JsonProperty("entpName")
-    val entpName: String?,
+    var entpName: String? = "",
 
     @JsonProperty("itemName")
-    val itemName: String?,
+    var itemName: String? = "",
 
     @JsonProperty("itemSeq")
-    val itemSeq: String?,
+    var itemSeq: String? = "",
 
     @JsonProperty("efcyQesitm")
-    val efcyQesitm: String?,
+    var efcyQesitm: String? = "",
 
     @JsonProperty("useMethodQesitm")
-    val useMethodQesitm: String?,
+    var useMethodQesitm: String? = "",
 
     @JsonProperty("atpnWarnQesitm")
-    val atpnWarnQesitm: String?,
+    var atpnWarnQesitm: String? = "",
 
     @JsonProperty("atpnQesitm")
-    val atpnQesitm: String?,
+    var atpnQesitm: String? = "",
 
     @JsonProperty("intrcQesitm")
-    val intrcQesitm: String?,
+    var intrcQesitm: String? = "",
 
     @JsonProperty("seQesitm")
-    val seQesitm: String?,
+    var seQesitm: String? = "",
 
     @JsonProperty("depositMethodQesitm")
-    val depositMethodQesitm: String?,
+    var depositMethodQesitm: String? = "",
 
     @JsonProperty("openDe")
-    val openDe: String?,
+    var openDe: String? = "",
 
     @JsonProperty("updateDe")
-    val updateDe: String?,
+    var updateDe: String? = "",
 
     @JsonProperty("itemImage")
-    val itemImage: String?
+    var itemImage: String? = ""
 )
