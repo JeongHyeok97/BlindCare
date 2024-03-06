@@ -32,7 +32,7 @@ class ChatSpeechRecognitionListener(
     }
 
     override fun onError(error: Int) {
-//        Toast.makeText(context, "ERROR $error", Toast.LENGTH_SHORT).show()
+
         onStop()
     }
 
@@ -48,9 +48,6 @@ class ChatSpeechRecognitionListener(
         val message = Message(author = 1, content = content, timestamp = System.currentTimeMillis())
         chatViewModel.add(message)
         chatViewModel.searchDrugInfo(content, onMessage)
-
-//        Toast.makeText(context, "INPUT ${message.content}", Toast.LENGTH_SHORT).show()
-
     }
 
     override fun onPartialResults(partialResults: Bundle?) {

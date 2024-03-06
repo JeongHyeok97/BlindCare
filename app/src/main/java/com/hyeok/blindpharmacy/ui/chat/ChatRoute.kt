@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Bundle
+import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.widget.Toast
@@ -56,6 +58,7 @@ fun ChatScreen(chatViewModel: ChatViewModel,
                onStopMessage: ()->Unit) {
     val context = LocalContext.current
     val conversations = remember { chatViewModel.conversation }
+
     val recognizer = SpeechRecognizer.createSpeechRecognizer(context)
     val recognizerScope = rememberCoroutineScope()
     var recording by remember{
@@ -64,14 +67,6 @@ fun ChatScreen(chatViewModel: ChatViewModel,
     if (recording){
         RecordingDialog()
     }
-//    val activityResult = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()){
-//        val intent = it.data
-//        if (intent != null){
-//
-//        }
-//
-//    }
-
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -89,16 +84,63 @@ fun ChatScreen(chatViewModel: ChatViewModel,
                     val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                     intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR")
-                    recognizer.setRecognitionListener(ChatSpeechRecognitionListener(context,
+                    recognizer.setRecognitionListener(object : RecognitionListener{
+                        override fun onReadyForSpeech(params: Bundle?) {
+
+                        }
+
+                        override fun onBeginningOfSpeech() {
+                        // recognizer 의 startListening 이 호출 되면 동시에 호출 됩니다.
+                        }
+
+                        override fun onRmsChanged(rmsdB: Float) {
+
+                        }
+
+                        override fun onBufferReceived(buffer: ByteArray?) {
+                        // recognizer 에 buffer , 즉 , 무언가 음성이 Text 로써 인식이 될 때마다
+                        // ByteArray 로 이곳 에서 수신 가능 합니다.
+                        }
+
+                        override fun onEndOfSpeech() {
+                            // recognizer 의 stopListening 이 호출 되면 동시에 호출 됩니다.
+                        }
+
+                        override fun onError(error: Int) {
+                            // 에러가 발생
+                        }
+
+                        override fun onResults(results: Bundle?) {
+                            val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                            var content = ""
+
+                            for (i in matches!!.indices){
+                                content += matches[i]
+                            }
+                        // recognizer 의 stopListening 이 호출 된 후 별도의 Error 가 발생 하지 않을 경우
+                        // 이곳, onResults 에서 Bundle 에 String Array 로 인식된 음성이 순서 대로 들어 있게 됩니다.
+
+                        }
+
+                        override fun onPartialResults(partialResults: Bundle?) {
+
+                        }
+
+                        override fun onEvent(eventType: Int, params: Bundle?) {
+
+                        }
+                    }
+                    /*ChatSpeechRecognitionListener(context,
                         chatViewModel,
                         onMessage,
                         onStop = {
                             recording=false
                         }
-                        ))
+                        )*/)
                     recognizer.startListening(intent)
                     delay(3000)
                     recognizer.stopListening()
+
 //                    activityResult.launch(intent)
                 }
                 if (!SpeechRecognizer.isRecognitionAvailable(context)) {
@@ -171,7 +213,6 @@ private fun getSpeechInput(context: Context) {
 
 
 private fun requestPermission(context: Context) {
-    // 버전 체크, 권한 허용했는지 체크
     if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)
         != PackageManager.PERMISSION_GRANTED
     ) {
